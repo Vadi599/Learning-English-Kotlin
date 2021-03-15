@@ -16,7 +16,6 @@ class CategoryAdapter(var categories: List<Category>) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     var properties: List<ThemeProperty> = ArrayList()
-        private set
 
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -53,7 +52,7 @@ class CategoryAdapter(var categories: List<Category>) :
         val cardView = holder.cv
         holder.categoryName.text = categories[position].categoryName
         holder.categoryIcon.setImageResource(categories[position].categoryImageResourceId)
-        cardView.setOnClickListener { v: View? ->
+        cardView.setOnClickListener {
             if (onItemClickListener != null) {
                 onItemClickListener!!.onItemClickedCategory(property)
             }
