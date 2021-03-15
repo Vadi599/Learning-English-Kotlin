@@ -17,10 +17,12 @@ class CategoryAdapter(var categories: List<Category>) :
 
     var properties: List<ThemeProperty> = ArrayList()
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private lateinit var onItemClickListener: OnItemClickListener
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
-        this.onItemClickListener = onItemClickListener
+        if (onItemClickListener != null) {
+            this.onItemClickListener = onItemClickListener
+        }
     }
 
     fun setThemePropertyList(properties: List<ThemeProperty>) {
@@ -53,9 +55,7 @@ class CategoryAdapter(var categories: List<Category>) :
         holder.categoryName.text = categories[position].categoryName
         holder.categoryIcon.setImageResource(categories[position].categoryImageResourceId)
         cardView.setOnClickListener {
-            if (onItemClickListener != null) {
-                onItemClickListener!!.onItemClickedCategory(property)
-            }
+            onItemClickListener.onItemClickedCategory(property)
         }
     }
 }

@@ -26,10 +26,10 @@ private const val ARG_PARAM2 = "param2"
  */
 class SelectionMenuFragment : Fragment(), SelectionMenuContract.View {
     // TODO: Rename and change types of parameters
-    private var fragmentView: View? = null
-    var presenter: SelectionMenuPresenter? = null
-    var categoryEntity: CategoryEntity? = null
-    var category: String? = null
+    private lateinit var fragmentView: View
+    private lateinit var presenter: SelectionMenuPresenter
+    private lateinit var categoryEntity: CategoryEntity
+    lateinit var category: String
 
     var resources = ArrayList<ResourcesOfCategory>()
 
@@ -58,7 +58,7 @@ class SelectionMenuFragment : Fragment(), SelectionMenuContract.View {
             this,
             context
         )
-        val themeId = arguments!!.getInt("themeId")
+        val themeId = arguments?.getInt("themeId")
         // Inflate the layout for this fragment
         fragmentView = inflater.inflate(R.layout.fragment_selection_menu, null)
         when (themeId) {
@@ -74,10 +74,12 @@ class SelectionMenuFragment : Fragment(), SelectionMenuContract.View {
             10 -> category = "Животные"
         }
         categoryEntity = CategoryEntity(category)
-        presenter!!.getThemePropertyFromDatabase(themeId)
-        presenter!!.getResourcesFromDatabase(category)
-        val btnLesson = fragmentView!!.findViewById<View>(R.id.btn_start_learning) as Button
-        btnLesson.setOnClickListener { showLesson(categoryEntity!!) }
+        if (themeId != null) {
+            presenter.getThemePropertyFromDatabase(themeId)
+        }
+        presenter.getResourcesFromDatabase(category)
+        val btnLesson = fragmentView.findViewById<View>(R.id.btn_start_learning) as Button
+        btnLesson.setOnClickListener { showLesson(categoryEntity) }
         return fragmentView
     }
 
@@ -103,9 +105,9 @@ class SelectionMenuFragment : Fragment(), SelectionMenuContract.View {
     }
 
     override fun showThemeProperty(properties: ThemeProperty) {
-        val typeOfTheme = fragmentView!!.findViewById<View>(R.id.tvTheme) as TextView
+        val typeOfTheme = fragmentView.findViewById<View>(R.id.tvTheme) as TextView
         typeOfTheme.text = properties.typeOfTheme
-        val countOfWords = fragmentView!!.findViewById<View>(R.id.count_of_words) as TextView
+        val countOfWords = fragmentView.findViewById<View>(R.id.count_of_words) as TextView
         countOfWords.text = properties.countOfWords
     }
 

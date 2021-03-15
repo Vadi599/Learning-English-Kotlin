@@ -25,8 +25,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class LessonFragment : Fragment() {
-    var pager: ViewPager? = null
-    var pagerAdapter: PagerAdapter? = null
+    lateinit var pager: ViewPager
+    private lateinit var pagerAdapter: PagerAdapter
     var category: String? = null
 
     // TODO: Rename and change types of parameters
@@ -47,38 +47,40 @@ class LessonFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_lesson, container, false)
-        category = arguments!!.getString("category")
+        category = arguments?.getString("category")
         pager = view.findViewById<View>(R.id.pager) as ViewPager
         val back = view.findViewById<View>(R.id.btn_back) as Button
         val forward = view.findViewById<View>(R.id.btn_forward) as Button
         pagerAdapter = MyFragmentPagerAdapter(fragmentManager, category)
-        pager!!.adapter = pagerAdapter
+        pager.adapter = pagerAdapter
         back.isEnabled = false
         back.setOnClickListener {
-            val getItem = pager!!.currentItem
+            val getItem = pager.currentItem
             if (getItem != 0) {
-                pager!!.setCurrentItem(getItem - 1, true)
+                pager.setCurrentItem(getItem - 1, true)
                 forward.isEnabled = true
             } else {
                 back.isEnabled = false
             }
         }
         forward.setOnClickListener {
-            val getItem = pager!!.currentItem
-            val totalItems = pager!!.adapter!!.count
+            val getItem = pager.currentItem
+            val totalItems = pager.adapter!!.count
             if (getItem < totalItems - 1) {
-                pager!!.setCurrentItem(getItem + 1, true)
+                pager.setCurrentItem(getItem + 1, true)
                 back.isEnabled = true
             } else if (getItem == totalItems - 1) {
                 forward.isEnabled = false
             }
         }
 
-        pager!!.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        pager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
-                val totalItems = pager!!.adapter!!.count
+                val totalItems = pager.adapter?.count
                 back.isEnabled = position != 0
-                forward.isEnabled = position != totalItems - 1
+                if (totalItems != null) {
+                    forward.isEnabled = position != totalItems - 1
+                }
             }
 
             override fun onPageScrolled(
@@ -106,9 +108,11 @@ class LessonFragment : Fragment() {
 
         init {
             val resourceList = categoryEntityRepository.getResource(category)
-            for (resources in resourceList!!) {
-                val resourceFragment: Fragment = ResourceFragment.newInstance(resources)
-                fragments.add(resourceFragment)
+            if (resourceList != null) {
+                for (resources in resourceList) {
+                    val resourceFragment: Fragment = ResourceFragment.newInstance(resources)
+                    fragments.add(resourceFragment)
+                }
             }
         }
     }

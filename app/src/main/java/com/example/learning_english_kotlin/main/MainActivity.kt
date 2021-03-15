@@ -18,10 +18,10 @@ import java.util.ArrayList
 class MainActivity : AppCompatActivity(),
     MainContract.View {
 
-    var categories: MutableList<Category>? = null
-    var recyclerView: RecyclerView? = null
-    var adapter: CategoryAdapter? = null
-    var presenter: MainPresenter? = null
+    private lateinit var categories: MutableList<Category>
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: CategoryAdapter
+    private lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,15 +91,15 @@ class MainActivity : AppCompatActivity(),
         adapter = CategoryAdapter(
             categories as ArrayList<Category>
         )
-        recyclerView!!.adapter = adapter
-        recyclerView!!.layoutManager = GridLayoutManager(this, 2)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         presenter =
             MainPresenter(
                 this,
                 baseContext
             )
-        presenter!!.getDataFromDatabase()
-        adapter!!.setOnItemClickListener(object :
+        presenter.getDataFromDatabase()
+        adapter.setOnItemClickListener(object :
             OnItemClickListener {
             override fun onItemClickedCategory(themeProperty: ThemeProperty) {
                 showSelectionMenu(themeProperty)
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun showThemeProperties(properties: List<ThemeProperty>) {
-        adapter!!.setThemePropertyList(properties)
+        adapter.setThemePropertyList(properties)
     }
 
     override fun showSelectionMenu(property: ThemeProperty) {

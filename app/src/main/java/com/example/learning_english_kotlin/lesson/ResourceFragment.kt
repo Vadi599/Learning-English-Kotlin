@@ -28,8 +28,8 @@ class ResourceFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            wordRu = arguments!!.getString(WORD_RU)
-            wordEn = arguments!!.getString(WORD_EN)
+            wordRu = arguments?.getString(WORD_RU)
+            wordEn = arguments?.getString(WORD_EN)
             resourceImageId = arguments!!.getInt(IMAGE_RESOURCE_ID)
         }
     }
